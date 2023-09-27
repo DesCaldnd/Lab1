@@ -3,4 +3,6 @@ project(Lab1 C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(Task1 T1/main.c)
+add_executable(Task1 T1/main.c functions.h)
+add_executable(Task2 T2/main.c functions.h)
+add_executable(Task3 T3/main.c functions.h)

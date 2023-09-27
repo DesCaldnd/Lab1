@@ -1,18 +1,26 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
+#include "../functions.h"
 
+enum flag_type
+{ h_f, p_f, s_f, e_f, a_f, f_f, undefined };
+
+enum flag_type get_flag_type(char []);
 void help();
-void incorrect_argc();
 void incorrect_flag(char[]);
-void incorrect_value(char[]);
-void h_flag(int);
-void p_flag(int);
-void s_flag(char[]);
-void e_flag(int);
-void a_flag(int);
-void f_flag(int);
+enum error_type check_h_flag(int);
+void print_h_flag(int);
+enum error_type check_p_flag(int);
+void print_p_flag(int);
+void print_s_flag(char[]);
+void print_e_flag(int);
+enum error_type check_a_flag(int);
+void print_a_flag(int);
+enum error_type check_f_flag(int);
+void print_f_flag(int, int, enum error_type);
+int factorial(int, enum error_type*);
+void print_natural(int);
+
 
 void print_sep(int length)
 {
@@ -26,54 +34,74 @@ int main(int argc, char* argv[]) {
     printf("\n");
     if(argc % 2 != 1 || argc < 3)
     {
-        incorrect_argc();
+        incorrect_argc(&help);
         return 0;
     }
     for (int i = 1; i < argc; i += 2)
     {
-        int value = abs(atoi(argv[i+1]));
-        if (strnlen_s(argv[i], 4) != 2 || argv[i][0] != '-')
+        enum flag_type f_type = get_flag_type(argv[i]);
+        enum error_type e_type;
+        int value = int_from_str(argv[i+1], &e_type);
+
+        if (f_type == undefined)
         {
             incorrect_flag(argv[i]);
-        } else if (!value)
+        } else if (e_type == error)
         {
             incorrect_value(argv[i+1]);
         } else
         {
-            switch (argv[i][1]) {
-                case 'h':
+            switch (f_type) {
+                case h_f:
                 {
-                    h_flag(value);
+                    enum error_type state = check_h_flag(value);
+
+                    if (state == correct)
+                        print_h_flag(value);
+                    else
+                        printf("Number %d is is out of range of [1, 100]\n\n", value);
                     break;
                 }
-                case 'p':
+                case p_f:
                 {
-                    p_flag(value);
+                    enum error_type state = check_p_flag(value);
+
+                    if (state == correct)
+                        print_p_flag(value);
+                    else
+                        print_natural(value);
                     break;
                 }
-                case 's':
+                case s_f:
                 {
-                    s_flag(argv[i+1]);
+                    print_s_flag(argv[i + 1]);
                     break;
                 }
-                case 'e':
+                case e_f:
                 {
-                    e_flag(value);
+                    print_e_flag(value);
                     break;
                 }
-                case 'a':
+                case a_f:
                 {
-                    a_flag(value);
+                    enum error_type state = check_a_flag(value);
+
+                    if (state == correct)
+                        print_a_flag(value);
+                    else
+                        print_natural(value);
                     break;
                 }
-                case 'f':
+                case f_f:
                 {
-                    f_flag(value);
-                    break;
-                }
-                default:
-                {
-                    incorrect_flag(argv[i]);
+                    enum error_type state = check_f_flag(value), fact_overflow_error;
+
+                    if (state == correct)
+                    {
+                        int fact = factorial(value, &fact_overflow_error);
+                        print_f_flag(value, fact, fact_overflow_error);
+                    } else
+                        print_natural(value);
                     break;
                 }
             }
@@ -83,14 +111,14 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+enum error_type check_h_flag(int val)
+{
+    return val > 0 && val <= 100 ? correct : error;
+}
 
-void h_flag(int val)
+void print_h_flag(int val)
 {
     printf("-h flag with value %d:\n", val);
-    if (val > 100)
-    {
-        printf("Number %d is too big. It must be less or equal to 100", val);
-    } else
         for (int i = val; i <= 100; i += val)
         {
             printf("%d ", i);
@@ -98,7 +126,12 @@ void h_flag(int val)
     printf("\n\n");
 }
 
-void p_flag(int val)
+enum error_type check_p_flag(int val)
+{
+    return val > 0 ? correct : error;
+}
+
+void print_p_flag(int val)
 {
     bool result = false;
     printf("-p flag with value %d:\n", val);
@@ -110,14 +143,13 @@ void p_flag(int val)
     printf(result ? "%d is complex\n\n" : "%d is simple\n\n", val);
 }
 
-void s_flag(char val[])
+void print_s_flag(char val[])
 {
     bool digit_passed = false;
-    unsigned int len = strnlen_s(val, 100);
 
     printf("-s flag with value %s:\n", val);
 
-    for (int i = 0; i < len; ++i)
+    for (int i = 0; val[i] != '\0'; ++i)
     {
       if ((val[i] >= '1' && val[i] <= '9') || (val[i] == '0' && digit_passed))
       {
@@ -126,10 +158,14 @@ void s_flag(char val[])
       } else if (val[i] == '+' || val[i] == '-')
           printf("%c ", val[i]);
     }
+
+    if (!digit_passed)
+        printf("0");
+
     printf("\n\n");
 }
 
-void e_flag(int val)
+void print_e_flag(int val)
 {
     if (val > 10)
         printf("Value in flag -e must be less or equal to 10, now it is %d\n\n", val);
@@ -152,16 +188,35 @@ void e_flag(int val)
 
 }
 
-void a_flag(int val)
+enum error_type check_a_flag(int val)
+{
+    return val > 0 ? correct : error;
+}
+
+void print_a_flag(int val)
 {
     printf("-a flag with value %d:\n", val);
 
     printf("Sum is: %d\n\n", ((1 + val) * val) / 2);
 }
 
-void f_flag(int val)
+enum error_type check_f_flag(int val)
+{
+    return val > 0 ? correct : error;
+}
+
+void print_f_flag(int val, int fact, enum error_type state)
 {
     printf("-f flag with value %d:\n", val);
+
+    if (state == correct)
+        printf("Factorial of %d is %llu\n\n", val, fact);
+    else
+        printf("Number is too big and variable overflowed\n\n");
+}
+
+int factorial(int val, enum error_type* check_state)
+{
     unsigned long long fact = 1, prev_fact = 1;
     bool not_overflowed = true;
 
@@ -171,16 +226,53 @@ void f_flag(int val)
         fact *= i;
         not_overflowed = prev_fact == fact / i;
     }
-
-    if (not_overflowed)
-        printf("Factorial of %d is %llu\n\n", val, fact);
-    else
-        printf("Number is too big and variable overflowed\n\n");
+    *check_state = not_overflowed ? correct : error;
+    return fact;
 }
 
-void incorrect_value(char val[])
+enum flag_type get_flag_type(char flag[])
 {
-    printf("\"%s\" is not a number. You must enter an integer number\n\n", val);
+    if (strnlen_s(flag, 4) != 2 || flag[0] != '-')
+        return undefined;
+    enum flag_type result;
+    switch (flag[1]) {
+        case 'h':
+        {
+            result = h_f;
+            break;
+        }
+        case 'p':
+        {
+            result = p_f;
+            break;
+        }
+        case 's':
+        {
+            result = s_f;
+            break;
+        }
+        case 'e':
+        {
+            result = e_f;
+            break;
+        }
+        case 'a':
+        {
+            result = a_f;
+            break;
+        }
+        case 'f':
+        {
+            result = f_f;
+            break;
+        }
+        default:
+        {
+            result = undefined;
+            break;
+        }
+    }
+    return result;
 }
 
 void incorrect_flag(char flag[])
@@ -189,20 +281,19 @@ void incorrect_flag(char flag[])
     help();
 }
 
-void incorrect_argc()
-{
-    printf("You have entered incorrect number of arguments. Here is documentation below: ");
-    help();
-}
-
 void help()
 {
     printf("\nYou must enter one or more pair of flag with integer value (not zero).\n"
            "Correct flags are:\n"
-           "-h Prints all numbers up to 100, which are aliquot to value (uses abs)\n"
-           "-p Prints if number is simple or complex (uses abs)\n"
-           "-s Prints decimal place number of value (uses abs)\n"
-           "-e Prints table of powers (1\; 10)^(1\; value) (uses abs)\n"
-           "-a Prints sum of numbers from 1 to value (uses abs)\n"
-           "-f Prints factorial of value (uses abs)\n\n");
+           "-h Prints all numbers up to 100, which are aliquot to value\n"
+           "-p Prints if number is simple or complex\n"
+           "-s Prints decimal place number of value\n"
+           "-e Prints table of powers (1\; 10)^(1\; value)\n"
+           "-a Prints sum of numbers from 1 to value\n"
+           "-f Prints factorial of value\n\n");
+}
+
+void print_natural(int val)
+{
+    printf("Value %d must be natural\n\n", val);
 }
