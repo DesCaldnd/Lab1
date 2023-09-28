@@ -71,7 +71,7 @@ double double_from_str(char str[], enum error_type* check_state)
 
 void incorrect_argc(void (*documentation_fun_ptr)())
 {
-    printf("You have entered incorrect number of arguments. Here is documentation below: ");
+    printf("You have entered incorrect number of arguments. Here is documentation below:\n");
     documentation_fun_ptr();
 }
 
@@ -92,7 +92,7 @@ void swap(double *a, int i, int j)
     a[j] = s;
 }
 
-bool next_set(double *a, int n)
+bool next_perm(double *a, int n)
 {
     int j = n - 2;
     while (j != -1 && a[j] >= a[j + 1]) j--;
