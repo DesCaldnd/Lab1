@@ -6,9 +6,6 @@
 #include <math.h>
 #include "../functions.h"
 
-typedef long long ll;
-
-ll integer_from_n_radix(char *string, int radix, enum error_type* error_return);
 void integer_to_n_radix(ll number, int radix, char* string);
 int char_to_int(char sym);
 bool is_char_correct(char sym, int radix);
@@ -35,7 +32,7 @@ int main()
 
     if (strcmp(input_number, "Stop"))
     {
-        tmp = integer_from_n_radix(input_number, radix, &error_return);
+        tmp = integer_from_n_radix(input_number, radix, &error_return, &char_to_int, &is_char_correct);
         if (error_return == correct)
         {
             has_correct_number_entered = true;
@@ -47,7 +44,7 @@ int main()
 
         while (strcmp(input_number, "Stop"))
         {
-            tmp = integer_from_n_radix(input_number, radix, &error_return);
+            tmp = integer_from_n_radix(input_number, radix, &error_return, &char_to_int, &is_char_correct);
             if (error_return == correct)
             {
                 has_correct_number_entered = true;
@@ -72,32 +69,6 @@ int main()
     {
         printf("You haven`t entered any correct number");
     }
-}
-
-ll integer_from_n_radix(char *string, int radix, enum error_type* error_return)
-{
-    ll result = 0, multiplier = 1;
-    bool has_sign_entered = false, is_negative = false;
-    int length = strnlen_s(string, 64);
-
-    for(int i = length - 1; i >= 0; --i)
-    {
-        if (is_char_correct(string[i], radix) && !has_sign_entered)
-        {
-            result += char_to_int(string[i]) * multiplier;
-            multiplier *= radix;
-        } else if ((string[i] == '+' || string[i] == '-') && !has_sign_entered)
-        {
-            is_negative = string[i] == '-';
-            has_sign_entered = true;
-        } else
-        {
-            *error_return = error;
-            return 0;
-        }
-    }
-    *error_return = correct;
-    return is_negative ? result * -1 : result;
 }
 
 void integer_to_n_radix(ll number, int radix, char* string)
