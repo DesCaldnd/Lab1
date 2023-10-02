@@ -94,6 +94,13 @@ void swap(double *a, int i, int j)
     a[j] = s;
 }
 
+void swap_int(int *l, int *r)
+{
+    int tmp = *l;
+    *l = *r;
+    *r = tmp;
+}
+
 bool next_perm(double *a, int n)
 {
     int j = n - 2;
@@ -109,7 +116,7 @@ bool next_perm(double *a, int n)
     return true;
 }
 
-void sort(double *array, int size)
+void sort_double_bubble(double *array, int size)
 {
     for (int step = 0; step < size - 1; ++step) {
 

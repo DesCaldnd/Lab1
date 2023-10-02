@@ -155,7 +155,7 @@ bool check_right(double precision, double l_1, double l_2, double l_3)
 void equation_hub(double precision, double f1, double f2, double f3)
 {
     double coeffs[3] = {f1, f2, f3};
-    sort(coeffs, 3);
+    sort_double_bubble(coeffs, 3);
 
     struct equation_answer answer = solve_equation(precision, coeffs);
     print_eq_answer(answer, coeffs);
