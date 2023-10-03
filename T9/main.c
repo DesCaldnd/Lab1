@@ -58,6 +58,12 @@ int main(int argc, char* argv[])
     b_arr = (int*)(malloc(b_size * sizeof(int)));
     c_arr = (int*)(malloc(a_size * sizeof(int)));
 
+    if(!(a_arr && b_arr && c_arr))
+    {
+        printf("Bad alloc\n");
+        return 0;
+    }
+
     fill_int_arr(a_arr, a_size, -1000, 1000);
     fill_int_arr(b_arr, b_size, -1000, 1000);
     quick_sort_int_arr(b_arr, b_size);

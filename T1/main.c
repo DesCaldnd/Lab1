@@ -128,7 +128,7 @@ void print_h_flag(int val)
 
 enum error_type check_p_flag(int val)
 {
-    return val > 0 ? correct : error;
+    return val > 1 ? correct : error;
 }
 
 void print_p_flag(int val)
