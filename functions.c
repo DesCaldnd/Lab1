@@ -152,19 +152,14 @@ ld power_ld_int(ld base, unsigned int pow)
 {
     ld result = 1, last_multiplier = base;
 
-    unsigned int index = 0;
-
     for (int i = 0; i < sizeof(unsigned int) * 8; ++i)
     {
         if (pow & 1u << i)
         {
-            for (int j = index; j < i; ++j)
-            {
-                ++index;
-                last_multiplier *= last_multiplier;
-            }
+
             result *= last_multiplier;
         }
+        last_multiplier *= last_multiplier;
     }
     return result;
 }
