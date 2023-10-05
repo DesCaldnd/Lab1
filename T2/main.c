@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     {
         printf("Precision must be natural number\n\n");
         return 0;
-    } else if (precision > 18)
+    } else if (precision > 13)
     {
         printf("Precision is too big\n\n");
         docs();
@@ -65,6 +65,6 @@ void print_three_constants(ld limit, ld taylor, ld equation, int precision)
 
 void docs()
 {
-    printf("You must have only one integer argument in range [1, 18], which shows, how many digits after dot you want to see.\n"
+    printf("You must have only one integer argument in range [1, 13], which shows, how many digits after dot you want to see.\n"
            "For example 2 is 0.01\n\n");
 }
