@@ -53,11 +53,11 @@ double double_from_str(char str[], enum error_type* check_state)
             dot_passed = true;
         }else
         {
-            *check_state = error;
+            *check_state = ERROR;
             return 0;
         }
     }
-    check_state = correct;
+    check_state = CORRECT;
     return is_negative ? (-1.0 * (result_up + result_down)): result_up + result_down;
 }
 
@@ -140,11 +140,11 @@ ll integer_from_n_radix(char *string, int radix, enum error_type* error_return, 
             has_sign_entered = true;
         } else
         {
-            *error_return = error;
+            *error_return = ERROR;
             return 0;
         }
     }
-    *error_return = correct;
+    *error_return = CORRECT;
     return is_negative ? result * -1 : result;
 }
 
@@ -167,4 +167,17 @@ ld power_ld_int(ld base, unsigned int pow)
         }
     }
     return result;
+}
+
+ll round_ld(ld number)
+{
+    if (((ll)(number * 10)) % 10 >= 5)
+        return number + 1;
+    else
+        return number;
+}
+
+ld clamp_low(ld number, ld border)
+{
+    return number < border ? border : number;
 }
