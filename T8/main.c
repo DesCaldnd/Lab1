@@ -3,6 +3,7 @@
 //
 #include "../functions.h"
 #include <stdlib.h>
+#include <ctype.h>
 
 void docs();
 char process_number(char sym, FILE* in, FILE* out);
@@ -43,7 +44,7 @@ int main(int argc, char* argv[])
 
     while (!feof(input))
     {
-        if(sym != ' ' && sym != '\n' && sym != '\t')
+        if(!isspace(sym))
         {
             sym = process_number(sym, input, output);
         } else
@@ -59,14 +60,14 @@ char process_number(char sym, FILE* in, FILE* out)
     char string[64];
 
     int counter = 0;
-    while (sym != ' ' && sym != '\n' && sym != '\t' && counter < 64 && !feof(in))
+    while (!isspace(sym) && counter < 64 && !feof(in))
     {
         string[counter] = sym;
         ++counter;
         fscanf_s(in, "%c", &sym);
     }
 
-    if (sym != ' ' && sym != '\n' && sym != '\t' && !feof(in))
+    if (!isspace(sym) && !feof(in))
     {
         return skip(in);
     }
@@ -90,25 +91,24 @@ char process_number(char sym, FILE* in, FILE* out)
     enum error_type error_return;
 
     ll number = integer_from_n_radix(string, radix, &error_return, &char_to_int, &is_char_correct);
-
-    int offset = 0;
-    bool need_move = false;
-    for (int i = 0; i < counter; ++i)
-    {
-        if (string[i] == 0 && !need_move)
-            offset++;
-        else if (string[i] != '-' && string[i] != '+')
-        {
-            need_move = true;
-            string[i - offset] = string[i];
-        }
-
-    }
-
     if (error_return == correct)
     {
-        fprintf(out, "%s %d %lld\n", string, radix, number);
+        int offset = 0;
+        bool need_move = false;
+        for (int i = 0; i < counter; ++i)
+        {
+            if (string[i] == 0 && !need_move)
+                offset++;
+            else if (string[i] != '-' && string[i] != '+')
+            {
+                need_move = true;
+                string[i - offset] = string[i];
+            }
+
+        }
+            fprintf(out, "%s %d %lld\n", string, radix, number);
     }
+    return sym;
 }
 
 char skip(FILE* in)
