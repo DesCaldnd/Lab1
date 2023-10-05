@@ -12,7 +12,7 @@ typedef long long ll;
 typedef long double ld;
 
 enum error_type
-{ correct, error };
+{ CORRECT, ERROR };
 
 int int_from_str(char str[], enum error_type* check_state);
 

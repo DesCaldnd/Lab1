@@ -5,7 +5,7 @@
 #include <string.h>
 
 enum flag_type
-{q_f, m_f, t_f, undefined};
+{q_f, m_f, t_f, UNDEFINED};
 
 enum answer_type
 {two_roots, one_root, no_root};
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
             {
                 struct four_params args = parse_four_params(&argv);
 
-                if (args.state == correct)
+                if (args.state == CORRECT)
                 {
                     equation_hub(fabs(args.par_1), args.par_2, args.par_3, args.par_4);
                 } else
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
             {
                 struct two_params args = parse_two_params(&argv);
 
-                if (args.state == correct)
+                if (args.state == CORRECT)
                 {
                     hold_print_m_flag(args.par_1, args.par_2);
                 } else
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
             {
                 struct four_params args = parse_four_params(&argv);
 
-                if (args.state == correct)
+                if (args.state == CORRECT)
                 {
                     if (check_three_args(args.par_2, args.par_3, args.par_4))
                     {
@@ -247,10 +247,10 @@ struct four_params parse_four_params(char** argv[])
     result.par_3 = double_from_str((*argv)[4], &e3);
     result.par_4 = double_from_str((*argv)[5], &e4);
 
-    if (e1 == error || e2 == error || e3 == error || e4 == error || result.par_1 == 0)
-        result.state = error;
+    if (e1 == ERROR || e2 == ERROR || e3 == ERROR || e4 == ERROR || result.par_1 == 0)
+        result.state = ERROR;
     else
-        result.state = correct;
+        result.state = CORRECT;
 
     return result;
 }
@@ -262,10 +262,10 @@ struct two_params parse_two_params(char** argv[])
     result.par_1 = int_from_str((*argv)[2], &e1);
     result.par_2 = int_from_str((*argv)[3], &e2);
 
-    if (e1 == error || e2 == error)
-        result.state = error;
+    if (e1 == ERROR || e2 == ERROR)
+        result.state = ERROR;
     else
-        result.state = correct;
+        result.state = CORRECT;
 
     return result;
 }
@@ -273,7 +273,7 @@ struct two_params parse_two_params(char** argv[])
 enum flag_type get_flag_type(char flag[])
 {
     if (strnlen_s(flag, 4) != 2 || flag[0] != '-')
-        return undefined;
+        return UNDEFINED;
     enum flag_type result;
     switch (flag[1]) {
         case 'q':
@@ -293,7 +293,7 @@ enum flag_type get_flag_type(char flag[])
         }
         default:
         {
-            result = undefined;
+            result = UNDEFINED;
             break;
         }
     }

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 #include "../functions.h"
 
 void integer_to_n_radix(ll number, int radix, char* string);
@@ -33,7 +34,7 @@ int main()
     if (strcmp(input_number, "Stop"))
     {
         tmp = integer_from_n_radix(input_number, radix, &error_return, &char_to_int, &is_char_correct);
-        if (error_return == correct)
+        if (error_return == CORRECT)
         {
             has_correct_number_entered = true;
             max_number = tmp;
@@ -45,7 +46,7 @@ int main()
         while (strcmp(input_number, "Stop"))
         {
             tmp = integer_from_n_radix(input_number, radix, &error_return, &char_to_int, &is_char_correct);
-            if (error_return == correct)
+            if (error_return == CORRECT)
             {
                 has_correct_number_entered = true;
                 if (tmp > max_number)
@@ -67,7 +68,7 @@ int main()
         printf("Max number with 36 base: %s\n\n", input_number);
     } else
     {
-        printf("You haven`t entered any correct number");
+        printf("You haven`t entered any CORRECT number");
     }
 }
 
@@ -83,7 +84,7 @@ void integer_to_n_radix(ll number, int radix, char* string)
         ++length;
     }
     string[length] = '\0';
-    number = llabs(number);
+    number = labs(number);
 
     while(number)
     {
@@ -104,12 +105,11 @@ char int_to_char(int num)
 
 int char_to_int(char sym)
 {
-    if (sym >= '0' && sym <= '9')
-        return sym - '0';
-    else if (sym >= 'A' && sym <= 'Z')
-        return sym - 'A' + 10;
-    else
-        return -1;
+	if (isalnum(sym)) {
+		return isdigit(sym) ? sym - '0' : sym - 'A' + 10;
+	}
+
+	return -1;
 }
 
 bool is_char_correct(char sym, int radix)

@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 
     while (!feof(input))
     {
-        if(!isspace(sym))
+        if(sym != ' ' && sym != '\n' && sym != '\t')
         {
             sym = process_number(sym, input, output);
         } else
@@ -60,14 +60,14 @@ char process_number(char sym, FILE* in, FILE* out)
     char string[64];
 
     int counter = 0;
-    while (!isspace(sym) && counter < 64 && !feof(in))
+    while (sym != ' ' && sym != '\n' && sym != '\t' && counter < 64 && !feof(in))
     {
         string[counter] = sym;
         ++counter;
         fscanf_s(in, "%c", &sym);
     }
 
-    if (!isspace(sym) && !feof(in))
+    if (sym != ' ' && sym != '\n' && sym != '\t' && !feof(in))
     {
         return skip(in);
     }
@@ -91,7 +91,7 @@ char process_number(char sym, FILE* in, FILE* out)
     enum error_type error_return;
 
     ll number = integer_from_n_radix(string, radix, &error_return, &char_to_int, &is_char_correct);
-    if (error_return == correct)
+    if (error_return == CORRECT)
     {
         int offset = 0;
         bool need_move = false;
@@ -105,8 +105,8 @@ char process_number(char sym, FILE* in, FILE* out)
                 string[i - offset] = string[i];
             }
 
-        }
-            fprintf(out, "%s %d %lld\n", string, radix, number);
+    	}
+        fprintf(out, "%s %d %lld\n", string, radix, number);
     }
     return sym;
 }

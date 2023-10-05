@@ -19,11 +19,11 @@ int int_from_str(char str[], enum error_type* check_state)
             is_negative = sym == '-';
         } else
         {
-            *check_state = error;
+            *check_state = ERROR;
             return 0;
         }
     }
-    check_state = correct;
+    *check_state = CORRECT;
     return is_negative ? result * -1 : result;
 }
 
@@ -91,18 +91,18 @@ void swap_int(int *l, int *r)
     *r = tmp;
 }
 
-bool next_perm(double *array, int length)
+bool next_perm(double *a, int n)
 {
-    int j = length - 2;
-    while (j != -1 && array[j] >= array[j + 1]) j--;
+    int j = n - 2;
+    while (j != -1 && a[j] >= a[j + 1]) j--;
     if (j == -1)
         return false;
-    int k = length - 1;
-    while (array[j] >= array[k]) k--;
-    swap(array, j, k);
-    int left = j + 1, right = length - 1;
-    while (left < right)
-        swap(array, left++, right--);
+    int k = n - 1;
+    while (a[j] >= a[k]) k--;
+    swap(a, j, k);
+    int l = j + 1, r = n - 1;
+    while (l<r)
+        swap(a, l++, r--);
     return true;
 }
 
@@ -167,24 +167,4 @@ ld power_ld_int(ld base, unsigned int pow)
         }
     }
     return result;
-}
-
-ll round_ld(ld number)
-{
-    if (((ll)(number * 10)) % 10 >= 5)
-    {
-        return number + 1;
-    } else
-    {
-        return number;
-    }
-}
-
-ld clamp_low(ld number, ld border)
-{
-    if (number < border)
-    {
-        return border;
-    }
-    return number;
 }
