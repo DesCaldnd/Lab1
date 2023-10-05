@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     enum error_type is_integer;
     int precision = int_from_str(argv[1], &is_integer);
 
-    if (is_integer == error)
+    if (is_integer == ERROR)
     {
         incorrect_value(argv[1]);
         return 0;

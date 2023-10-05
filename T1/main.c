@@ -2,8 +2,10 @@
 #include <string.h>
 #include "../functions.h"
 
+//-h 123 123 123 123 213 13 21
+
 enum flag_type
-{ h_f, p_f, s_f, e_f, a_f, f_f, undefined };
+{ H_F, P_F, S_F, E_F, A_F, F_F, UNDEFINED };
 
 enum flag_type get_flag_type(char []);
 void help();
@@ -43,60 +45,60 @@ int main(int argc, char* argv[]) {
         enum error_type e_type;
         int value = int_from_str(argv[i+1], &e_type);
 
-        if (f_type == undefined)
+        if (f_type == UNDEFINED)
         {
             incorrect_flag(argv[i]);
-        } else if (e_type == error)
+        } else if (e_type == ERROR)
         {
             incorrect_value(argv[i+1]);
         } else
         {
             switch (f_type) {
-                case h_f:
+                case H_F:
                 {
                     enum error_type state = check_h_flag(value);
 
-                    if (state == correct)
+                    if (state == CORRECT)
                         print_h_flag(value);
                     else
                         printf("Number %d is is out of range of [1, 100]\n\n", value);
                     break;
                 }
-                case p_f:
+                case P_F:
                 {
                     enum error_type state = check_p_flag(value);
 
-                    if (state == correct)
+                    if (state == CORRECT)
                         print_p_flag(value);
                     else
                         print_natural(value);
                     break;
                 }
-                case s_f:
+                case S_F:
                 {
                     print_s_flag(argv[i + 1]);
                     break;
                 }
-                case e_f:
+                case E_F:
                 {
                     print_e_flag(value);
                     break;
                 }
-                case a_f:
+                case A_F:
                 {
                     enum error_type state = check_a_flag(value);
 
-                    if (state == correct)
+                    if (state == CORRECT)
                         print_a_flag(value);
                     else
                         print_natural(value);
                     break;
                 }
-                case f_f:
+                case F_F:
                 {
                     enum error_type state = check_f_flag(value), fact_overflow_error;
 
-                    if (state == correct)
+                    if (state == CORRECT)
                     {
                         int fact = factorial(value, &fact_overflow_error);
                         print_f_flag(value, fact, fact_overflow_error);
@@ -113,7 +115,7 @@ int main(int argc, char* argv[]) {
 
 enum error_type check_h_flag(int val)
 {
-    return val > 0 && val <= 100 ? correct : error;
+    return val > 0 && val <= 100 ? CORRECT : ERROR;
 }
 
 void print_h_flag(int val)
@@ -128,7 +130,7 @@ void print_h_flag(int val)
 
 enum error_type check_p_flag(int val)
 {
-    return val > 1 ? correct : error;
+    return val > 1 ? CORRECT : ERROR;
 }
 
 void print_p_flag(int val)
@@ -190,7 +192,7 @@ void print_e_flag(int val)
 
 enum error_type check_a_flag(int val)
 {
-    return val > 0 ? correct : error;
+    return val > 0 ? CORRECT : ERROR;
 }
 
 void print_a_flag(int val)
@@ -202,14 +204,14 @@ void print_a_flag(int val)
 
 enum error_type check_f_flag(int val)
 {
-    return val > 0 ? correct : error;
+    return val > 0 ? CORRECT : ERROR;
 }
 
 void print_f_flag(int val, int fact, enum error_type state)
 {
     printf("-f flag with value %d:\n", val);
 
-    if (state == correct)
+    if (state == CORRECT)
         printf("Factorial of %d is %llu\n\n", val, fact);
     else
         printf("Number is too big and variable overflowed\n\n");
@@ -226,49 +228,49 @@ int factorial(int val, enum error_type* check_state)
         fact *= i;
         not_overflowed = prev_fact == fact / i;
     }
-    *check_state = not_overflowed ? correct : error;
+    *check_state = not_overflowed ? CORRECT : ERROR;
     return fact;
 }
 
 enum flag_type get_flag_type(char flag[])
 {
     if (strnlen_s(flag, 4) != 2 || flag[0] != '-')
-        return undefined;
+        return UNDEFINED;
     enum flag_type result;
     switch (flag[1]) {
         case 'h':
         {
-            result = h_f;
+            result = H_F;
             break;
         }
         case 'p':
         {
-            result = p_f;
+            result = P_F;
             break;
         }
         case 's':
         {
-            result = s_f;
+            result = S_F;
             break;
         }
         case 'e':
         {
-            result = e_f;
+            result = E_F;
             break;
         }
         case 'a':
         {
-            result = a_f;
+            result = A_F;
             break;
         }
         case 'f':
         {
-            result = f_f;
+            result = F_F;
             break;
         }
         default:
         {
-            result = undefined;
+            result = UNDEFINED;
             break;
         }
     }
@@ -288,7 +290,7 @@ void help()
            "-h Prints all numbers up to 100, which are aliquot to value\n"
            "-p Prints if number is simple or complex\n"
            "-s Prints decimal place number of value\n"
-           "-e Prints table of powers (1\; 10)^(1\; value)\n"
+           "-e Prints table of powers (1; 10)^(1; value)\n"
            "-a Prints sum of numbers from 1 to value\n"
            "-f Prints factorial of value\n\n");
 }

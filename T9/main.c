@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 
     int a = int_from_str(argv[1], &first_error), b = int_from_str(argv[2], &second_error);
 
-    if (first_error == error || second_error == error)
+    if (first_error == ERROR || second_error == ERROR)
     {
         printf("One of arguments is incorrect, please, check again");
         return 0;

@@ -19,11 +19,11 @@ int int_from_str(char str[], enum error_type* check_state)
             is_negative = sym == '-';
         } else
         {
-            *check_state = error;
+            *check_state = ERROR;
             return 0;
         }
     }
-    check_state = correct;
+    *check_state = CORRECT;
     return is_negative ? result * -1 : result;
 }
 
@@ -53,11 +53,11 @@ double double_from_str(char str[], enum error_type* check_state)
             dot_passed = true;
         }else
         {
-            *check_state = error;
+            *check_state = ERROR;
             return 0;
         }
     }
-    check_state = correct;
+    check_state = CORRECT;
     return is_negative ? (-1.0 * (result_up + result_down)): result_up + result_down;
 }
 
@@ -101,7 +101,7 @@ bool next_perm(double *a, int n)
     while (a[j] >= a[k]) k--;
     swap(a, j, k);
     int l = j + 1, r = n - 1;
-    while (l<r)
+    while (l < r)
         swap(a, l++, r--);
     return true;
 }
@@ -140,11 +140,11 @@ ll integer_from_n_radix(char *string, int radix, enum error_type* error_return, 
             has_sign_entered = true;
         } else
         {
-            *error_return = error;
+            *error_return = ERROR;
             return 0;
         }
     }
-    *error_return = correct;
+    *error_return = CORRECT;
     return is_negative ? result * -1 : result;
 }
 
