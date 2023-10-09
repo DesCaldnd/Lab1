@@ -39,3 +39,7 @@ ld power_ld_int(ld base, unsigned int pow);
 ll round_ld(ld number);
 
 ld clamp_low(ld number, ld border);
+
+void integer_to_n_radix(ll number, int radix, char* string);
+
+char int_to_char(int num);

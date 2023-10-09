@@ -7,10 +7,8 @@
 #include <ctype.h>
 #include "../functions.h"
 
-void integer_to_n_radix(ll number, int radix, char* string);
 int char_to_int(char sym);
 bool is_char_correct(char sym, int radix);
-char int_to_char(int num);
 
 int main()
 {
@@ -70,37 +68,6 @@ int main()
     {
         printf("You haven`t entered any CORRECT number");
     }
-}
-
-void integer_to_n_radix(ll number, int radix, char* string)
-{
-    int length = logl(number) / logl(radix);
-    int counter = 1;
-    ++length;
-
-    if (number < 0)
-    {
-        string[0] = '-';
-        ++length;
-    }
-    string[length] = '\0';
-    number = labs(number);
-
-    while(number)
-    {
-        int tmp = number % radix;
-        number /= radix;
-        string[length - counter] = int_to_char(tmp);
-        counter++;
-    }
-}
-
-char int_to_char(int num)
-{
-    if (num <= 9)
-        return num + '0';
-    else
-        return num - 10 + 'A';
 }
 
 int char_to_int(char sym)
