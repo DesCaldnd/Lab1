@@ -122,7 +122,7 @@ void sort_double_bubble(double *array, int size)
     }
 }
 
-ll integer_from_n_radix(char *string, int radix, enum error_type* error_return, char (*char_to_int)(char), bool (*is_char_correct)(char, int))
+ll integer_from_n_radix(char *string, int radix, enum error_type* error_return, int (*char_to_int)(char), bool (*is_char_correct)(char, int))
 {
     ll result = 0, multiplier = 1;
     bool has_sign_entered = false, is_negative = false;
