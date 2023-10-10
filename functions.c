@@ -207,3 +207,42 @@ char int_to_char(int num)
 	else
 		return num - 10 + 'A';
 }
+
+double ld_from_str(char str[], enum error_type* check_state)
+{
+    int result_up = 0;
+    ld result_down = 0, prec = 10;
+    bool has_sign = false, has_digit = false, is_negative = false, dot_passed = false;
+    for (int i = 0; str[i] != '\0'; ++i) {
+        char sym = str[i];
+        if (sym >= '0' && sym <= '9')
+        {
+            has_sign = true;
+            has_digit = true;
+            if (!dot_passed)
+                result_up = result_up * 10 + (sym - '0');
+            else
+            {
+                result_down = result_down + (double)(sym - '0') / prec;
+                prec *= 10;
+            }
+        } else if ((sym == '-' || sym == '+') && !has_sign && !has_digit)
+        {
+            is_negative = sym == '-';
+        } else if (sym == '.' && !dot_passed)
+        {
+            dot_passed = true;
+        }else
+        {
+            *check_state = ERROR;
+            return 0;
+        }
+    }
+    check_state = CORRECT;
+    return is_negative ? (-1.0 * (result_up + result_down)): result_up + result_down;
+}
+
+ld clamp(ld number, ld low_border, ld up_border)
+{
+    return number < low_border ? low_border : number > up_border ? up_border : number;
+}

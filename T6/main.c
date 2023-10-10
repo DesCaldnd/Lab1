@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	}
 
 	enum error_type epsilon_state;
-	double epsilon = double_from_str(argv[1], &epsilon_state);
+	ld epsilon = ld_from_str(argv[1], &epsilon_state);
 
 	if (epsilon_state == ERROR)
 	{
